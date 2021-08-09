@@ -83,7 +83,7 @@ class Archivo {
             fs.unlinkSync(this.file)
             console.log('===================ARCHIVO ELIMINADO==================')
         } catch (err) {
-            console.error('Something wrong happened removing the file', err)
+            console.error('error al eliminar el archivo', err)
         }
     }
     // COMPRUEBA SI EL ARCHIVO QUE EXISTE
