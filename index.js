@@ -28,7 +28,7 @@ class Archivo {
             const objson = await fs.promises.readFile(this.file);
 
             const obj = JSON.parse(objson.toString('utf-8'));
-            obj.push({ ...producto, id: obj.length });
+            obj.push({ ...producto, id: obj.length + 1 });
             try {
                 console.log(obj);
                 await fs.promises.writeFile(this.file, JSON.stringify(obj, null, "\t"));
@@ -39,8 +39,8 @@ class Archivo {
         } catch (error) {
             console.log(error);
             try {
-                
-                await fs.promises.writeFile('productos.json', JSON.stringify([{ ...producto, id: 0 }]))
+
+                await fs.promises.writeFile('productos.txt', JSON.stringify([{ ...producto, id: 1 }]))
             } catch (error) {
                 throw new Error(error);
             }
@@ -66,15 +66,25 @@ class Archivo {
             })
         }
     }
-    async leer(){
+    async leer() {
         try {
-            const objon= await fs.promises.readFile(this.file);
-        const obj=JSON.parse(objon.toString('utf-8'));
-        console.log(obj);
+            const objon = await fs.promises.readFile(this.file);
+            const obj = JSON.parse(objon.toString('utf-8'));
+            console.log(obj);
         } catch (error) {
             console.log(["array Vacio"]);
         }
-        
+
+    }
+    async delete() {
+
+
+        try {
+            fs.unlinkSync(this.file)
+            console.log('===================ARCHIVO ELIMINADO==================')
+        } catch (err) {
+            console.error('Something wrong happened removing the file', err)
+        }
     }
     // COMPRUEBA SI EL ARCHIVO QUE EXISTE
     exist() {
@@ -82,7 +92,7 @@ class Archivo {
     }
 
 }
-let myFile = new Archivo('./productos.json');
+let myFile = new Archivo('./productos.txt');
 
 
 
@@ -92,18 +102,21 @@ myFile.guardarAsync({
     thumbnail: "url:1"
 }
 );
-setTimeout(()=>{
+setTimeout(() => {
     console.log("===================AGREGA OTRO PRODUCTO==================");
     myFile.guardarAsync({
-    title: "Remera",
-    price: 270,
-    thumbnail: "url:2"
+        title: "Remera",
+        price: 270,
+        thumbnail: "url:2"
     }
-);
-},3000)
+    );
+}, 3000)
 myFile.leer();
-setTimeout(()=>{
+setTimeout(() => {
     console.log("===================LEE EL ARCHIVO==================");
     myFile.leer();
-},5000)
+}, 5000)
 
+setTimeout(()=>{
+    myFile.delete();
+},6000)
