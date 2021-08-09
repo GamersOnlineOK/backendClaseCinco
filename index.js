@@ -4,7 +4,7 @@
 
 // // ACA TRAIGO EL ARCHIVO Y LO EDITO AGREGANDO UNA PROPIEDAD TEST
 // const json = require("./package.json");
-// json.test="soy muy lento";
+// json.test="Agrego info";
 // console.log(json);
 
 
@@ -12,7 +12,7 @@ const fs = require("fs");
 
 // fs.promises.readFile('./package.json').then(data=>{
 //     const json = JSON.parse(data.toString('utf-8'));
-//     json.test="Se puso mas rapido";
+//     json.test="Lectura de Info";
 //     console.log(json);
 
 // })
@@ -29,7 +29,6 @@ class Archivo {
 
             const obj = JSON.parse(objson.toString('utf-8'));
             obj.push({ ...producto, id: obj.length });
-            console.log("push");
             try {
                 console.log(obj);
                 await fs.promises.writeFile(this.file, JSON.stringify(obj, null, "\t"));
@@ -67,6 +66,16 @@ class Archivo {
             })
         }
     }
+    async leer(){
+        try {
+            const objon= await fs.promises.readFile(this.file);
+        const obj=JSON.parse(objon.toString('utf-8'));
+        console.log(obj);
+        } catch (error) {
+            console.log(["array Vacio"]);
+        }
+        
+    }
     // COMPRUEBA SI EL ARCHIVO QUE EXISTE
     exist() {
         return fs.existsSync(this.file);
@@ -84,6 +93,7 @@ myFile.guardarAsync({
 }
 );
 setTimeout(()=>{
+    console.log("===================AGREGA OTRO PRODUCTO==================");
     myFile.guardarAsync({
     title: "Remera",
     price: 270,
@@ -91,3 +101,9 @@ setTimeout(()=>{
     }
 );
 },3000)
+myFile.leer();
+setTimeout(()=>{
+    console.log("===================LEE EL ARCHIVO==================");
+    myFile.leer();
+},5000)
+
